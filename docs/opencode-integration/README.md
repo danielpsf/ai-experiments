@@ -1,146 +1,326 @@
-# OpenCode/Crush Integration
+# OpenCode Integration
 
-> **Complete integration guide for terminal-based AI assistance**
+> **Complete guide to using OpenCode.ai terminal AI assistant with your local Ollama models**
 
 ## Overview
 
-Crush is the successor to OpenCode, providing powerful terminal-based AI assistance with direct integration to your local Ollama models.
+OpenCode is a powerful MIT-licensed terminal-based AI assistant that provides seamless integration with your local development environment. With commercial-freedom licensing and deep LSP integration, OpenCode offers professional-grade AI assistance without restrictions.
 
-## Features
+## Key Features
 
-- 🔌 **Direct Ollama Integration** - Connect to your local AI models
-- 🧠 **Multiple Model Support** - Switch between coding and research models
-- 📝 **LSP Integration** - Context-aware assistance with language servers
-- 🎯 **Agent System** - Specialized agents for different tasks
-- ⚡ **File Context** - AI understands your codebase structure
+- **MIT License**: Complete commercial freedom - use in any project, company, or product
+- **Local Privacy**: All processing happens on your machine with local Ollama models
+- **LSP Integration**: Automatic language server protocol support for enhanced code understanding
+- **Multiple Agents**: Specialized agents for different tasks (coding, research, quick tasks)
+- **Session Management**: Maintain context across development sessions
+- **File Context**: Analyze and edit files directly in your project
 
 ## Installation
 
-Crush is automatically installed during system setup. To verify:
+OpenCode is automatically installed during system setup. To verify:
 
 ```bash
-crush --version
+opencode --version
 ```
 
-If not installed, run:
+Or install manually:
 ```bash
-./scripts/install/install-crush.sh
+./scripts/install/install-opencode.sh
 ```
 
 ## Configuration
 
-Configuration is automatically set up at `~/.config/crush/crush.json` with optimal settings for your local models.
+Configuration is automatically set up at `~/.config/opencode/opencode.json` with optimal settings for your local models.
 
-### Available Models
+### Model Configuration
+Your setup includes these pre-configured models:
 
-- **qwen2.5-coder:14b** - Primary coding assistant (complex tasks)
-- **qwen2.5-coder:7b** - Fast coding assistant (quick tasks)  
-- **llama3.1:8b** - Research and documentation (128K context)
+- **qwen2.5-coder:14b** - Primary coding model (32K context)
+- **qwen2.5-coder:7b** - Quick tasks and small operations (32K context)  
+- **llama3.1:8b** - Research and analysis (131K context)
 
 ### Agent Configuration
+Specialized agents are configured for different tasks:
 
-- **coder** - Code generation and debugging
-- **research** - Documentation and analysis
-- **task** - Quick development tasks
-- **title** - Generate concise summaries
+- **coder** - Main coding agent using qwen2.5-coder:14b
+- **research** - Analysis and documentation using llama3.1:8b
+- **task** - Quick operations using qwen2.5-coder:7b
+- **title** - Session title generation using llama3.1:8b
 
-## Usage Examples
+## Basic Usage
 
-### Basic AI Assistance
-
+### Start OpenCode
 ```bash
-# Start interactive session
-crush
-
-# Direct prompts
-crush "Explain how to optimize this Python function" --file main.py
-crush "Generate a REST API in Go for user management"
+opencode
 ```
 
-### Development Workflows
-
-#### Code Review
+### Code Assistance
 ```bash
-# Review current changes
-git diff | crush "Review these changes for potential issues"
-
-# Review specific file
-crush "Analyze this code for performance improvements" --file database.py
+opencode "Explain how to optimize this Python function" --file main.py
+opencode "Generate a REST API in Go for user management"
 ```
 
-#### Documentation
+### Code Review and Analysis
 ```bash
-# Generate function docs
-crush "Generate comprehensive documentation for this function" --file utils.py
+# Review changes for issues
+git diff | opencode "Review these changes for potential issues"
 
-# Create project README
-crush "Generate a README.md for this project based on the codebase"
+# Analyze code performance
+opencode "Analyze this code for performance improvements" --file database.py
 ```
 
-#### Debugging
+### Documentation Generation
 ```bash
-# Analyze error logs
-crush "Help debug this error" --stdin < error.log
+# Generate function documentation
+opencode "Generate comprehensive documentation for this function" --file utils.py
 
-# Debug specific code
-crush "Why is this function not working as expected?" --file buggy_code.py
+# Generate project documentation
+opencode "Generate a README.md for this project based on the codebase"
 ```
 
-### Advanced Usage
-
-#### Custom Agents
+### Debugging Assistance
 ```bash
-# Use specific agent
-crush --agent coder "Generate a database migration"
-crush --agent research "Summarize this research paper" --file paper.pdf
+# Debug errors
+opencode "Help debug this error" --stdin < error.log
+
+# Troubleshoot issues  
+opencode "Why is this function not working as expected?" --file buggy_code.py
 ```
 
-#### Model Selection
+## Advanced Features
+
+### Agent Selection
 ```bash
-# Use specific model
-crush --model qwen2.5-coder:7b "Quick code fix needed"
-crush --model llama3.1:8b "Analyze this long document" --file report.md
+# Use specific agents for different tasks
+opencode --agent coder "Generate a database migration"
+opencode --agent research "Summarize this research paper" --file paper.pdf
 ```
 
-## IDE Integration
+### Model Selection
+```bash
+# Choose specific models based on task requirements
+opencode --model qwen2.5-coder:7b "Quick code fix needed"
+opencode --model llama3.1:8b "Analyze this long document" --file report.md
+```
 
-### VS Code
-Add to `.vscode/tasks.json`:
+## Editor Integration
+
+### Visual Studio Code
+Add to your VS Code tasks.json:
 ```json
 {
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "AI Code Review",
+            "label": "OpenCode Assistant",
             "type": "shell",
-            "command": "crush",
-            "args": ["Review this code for potential issues", "--file", "${file}"]
+            "command": "opencode",
+            "args": ["${input:prompt}", "--file", "${file}"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always"
+            }
+        }
+    ],
+    "inputs": [
+        {
+            "id": "prompt",
+            "description": "What would you like OpenCode to do?",
+            "type": "promptString"
         }
     ]
 }
 ```
 
-### Vim
-Add to `.vimrc`:
+### Vim/Neovim
+Add to your vimrc:
 ```vim
-function! AskAI()
-    let l:prompt = input("AI Prompt: ")
-    let l:filename = expand('%')
-    execute '!crush "' . l:prompt . '" --file ' . l:filename
+function! OpenCodeAssist()
+    let l:prompt = input('OpenCode prompt: ')
+    let l:filename = expand('%:p')
+    execute '!opencode "' . l:prompt . '" --file ' . l:filename
 endfunction
 
-nnoremap <leader>ai :call AskAI()<CR>
+command! OpenCode call OpenCodeAssist()
+nnoremap <leader>ai :OpenCode<CR>
 ```
 
-## Performance Tips
+## LSP Integration
 
-1. **Keep Models Loaded** - Models stay in memory for 24h
-2. **Use Appropriate Models** - qwen2.5-coder:7b for quick tasks
-3. **Batch Operations** - Process multiple files in one session
-4. **Context Awareness** - Use `--file` flag for better results
+OpenCode automatically detects and uses Language Server Protocol servers for enhanced code understanding:
+
+### Supported Languages
+- **Go**: gopls
+- **TypeScript/JavaScript**: typescript-language-server
+- **Python**: pylsp (Python LSP Server)
+- **Rust**: rust-analyzer
+- **Java**: Eclipse JDT Language Server
+
+### Custom LSP Configuration
+Add custom LSP servers in `~/.config/opencode/opencode.json`:
+```json
+{
+  "lsp": {
+    "mylang": {
+      "command": "mylang-lsp",
+      "args": ["--stdio"],
+      "env": {
+        "MYLANG_ENV": "development"
+      }
+    }
+  }
+}
+```
+
+## Configuration Customization
+
+### Model Settings
+Customize model behavior in `~/.config/opencode/opencode.json`:
+```json
+{
+  "model": "qwen2.5-coder:14b",
+  "small_model": "qwen2.5-coder:7b",
+  "agent": {
+    "coder": {
+      "model": "qwen2.5-coder:14b",
+      "description": "Primary coding assistant"
+    }
+  }
+}
+```
+
+### Tool Permissions
+Configure which tools OpenCode can use:
+```json
+{
+  "permission": {
+    "bash": "allow",
+    "edit": "allow",
+    "write": "ask"
+  }
+}
+```
+
+### UI Customization
+Customize the terminal interface in `~/.config/opencode/tui.json`:
+```json
+{
+  "theme": "default",
+  "scroll_speed": 3,
+  "compact_mode": false
+}
+```
+
+## Commercial Use
+
+**🎉 Complete Commercial Freedom!**
+
+OpenCode uses the MIT License, which means:
+- ✅ **No restrictions** for commercial use
+- ✅ **Use in proprietary software** without limitations  
+- ✅ **Sell products** that include or use OpenCode
+- ✅ **Company usage** without licensing concerns
+- ✅ **Modify and distribute** as needed
+
+Unlike other AI tools with commercial restrictions, OpenCode provides complete freedom for business use.
 
 ## Troubleshooting
 
-See [main troubleshooting guide](../TROUBLESHOOTING.md) for common issues and solutions.
+### Common Issues
 
-Happy coding with AI! 🚀
+1. **OpenCode not found**
+   ```bash
+   # Restart terminal or reload shell
+   source ~/.bashrc
+   # Or reinstall
+   ./scripts/install/install-opencode.sh
+   ```
+
+2. **Model connection issues**
+   ```bash
+   # Check Ollama is running
+   ollama list
+   # Restart Ollama if needed
+   systemctl restart ollama
+   ```
+
+3. **LSP not working**
+   ```bash
+   # Check LSP server is installed
+   which gopls typescript-language-server pylsp
+   ```
+
+### Debug Mode
+Enable debug logging:
+```json
+{
+  "options": {
+    "debug": true
+  }
+}
+```
+
+## Performance Optimization
+
+### Memory Management
+- **qwen2.5-coder:14b**: ~14GB RAM
+- **qwen2.5-coder:7b**: ~7GB RAM  
+- **llama3.1:8b**: ~8GB RAM
+
+### Context Management
+- Use appropriate models for task complexity
+- qwen2.5-coder:7b for quick tasks
+- qwen2.5-coder:14b for complex coding
+- llama3.1:8b for large document analysis
+
+### Session Optimization
+- Keep sessions focused on specific tasks
+- Use `/reset` to clear context when switching tasks
+- Save important sessions with `/share` for later reference
+
+## Integration with Development Workflow
+
+### Git Workflow
+```bash
+# Review changes before commit
+git diff --cached | opencode "Review these staged changes"
+
+# Generate commit messages
+git diff --cached | opencode "Generate a semantic commit message"
+
+# Code review assistance
+opencode "Review this pull request for issues" --file changes.diff
+```
+
+### CI/CD Integration
+OpenCode can be integrated into CI/CD pipelines for:
+- Automated code review
+- Documentation generation
+- Test case creation
+- Security analysis
+
+### Project Documentation
+```bash
+# Generate project documentation
+opencode "Create comprehensive API documentation" --file api/routes.js
+opencode "Generate setup instructions for this project"
+opencode "Create troubleshooting guide based on common issues"
+```
+
+## Best Practices
+
+1. **Use Specific Prompts**: Be clear and specific about what you want OpenCode to do
+2. **Provide Context**: Use `--file` to give OpenCode access to relevant files
+3. **Choose Right Agent**: Use appropriate agents for different types of tasks
+4. **Model Selection**: Pick models based on complexity and context requirements
+5. **Session Management**: Keep sessions focused and reset when changing topics
+
+## Support and Resources
+
+- **Documentation**: https://opencode.ai/docs
+- **GitHub**: https://github.com/anomalyco/opencode
+- **Discord**: https://opencode.ai/discord
+- **Local Configuration**: `~/.config/opencode/`
+
+OpenCode provides a powerful, commercially-free AI assistant that integrates seamlessly with your development environment while respecting your privacy and giving you complete control over your data and usage.

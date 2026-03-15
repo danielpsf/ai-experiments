@@ -28,7 +28,7 @@ graph TB
     end
     
     subgraph "Client Layer"
-        CR[Crush/OpenCode<br/>Terminal AI]
+        CR[OpenCode<br/>Terminal AI]
         BR[Browser<br/>Web Interface]
         API[Direct API Access]
     end
@@ -146,7 +146,7 @@ engines:
 
 ### Client Layer: Access Points
 
-#### Crush/OpenCode (Terminal)
+#### OpenCode (Terminal)
 - **Purpose**: Terminal-based AI assistant
 - **Technology**: Go-based CLI application
 - **Integration**: Direct connection to Ollama API
@@ -183,7 +183,7 @@ engines:
 ```
 OpenWebUI ─────────┐
                    ├──► host.docker.internal:11434 ──► Ollama
-Crush/OpenCode ────┘
+OpenCode ────┘
 
 SearXNG ──► Redis Cache
         ──► External Search Engines
@@ -282,7 +282,7 @@ Model Performance (Intel Core Ultra 9 185H):
 ```mermaid
 sequenceDiagram
     participant D as Developer
-    participant C as Crush
+    participant C as OpenCode
     participant O as Ollama
     participant W as OpenWebUI
     participant S as SearXNG
@@ -316,7 +316,7 @@ Document Upload → RAG Processing → Vector Storage → Query Enhancement → 
 ### Environment Variables
 - **Ollama**: Native system environment
 - **Docker**: Environment files and compose variables
-- **Crush**: JSON configuration files
+- **OpenCode**: JSON configuration files
 
 ### Configuration Hierarchy
 ```

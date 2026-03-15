@@ -23,7 +23,7 @@ This will:
 - ✅ Install Ollama natively for maximum performance
 - ✅ Download optimal AI models (Qwen2.5-Coder 14B + Llama 3.1 8B)
 - ✅ Configure Docker services (OpenWebUI + SearXNG + Redis)
-- ✅ Install Crush/OpenCode for terminal AI
+- ✅ Install OpenCode for terminal AI
 - ✅ Set up systemd services for auto-startup
 - ✅ Optimize system settings
 
@@ -38,7 +38,7 @@ This will:
 - **🌐 OpenWebUI**: http://localhost:3001
 - **🔍 SearXNG**: http://localhost:8081  
 - **🦙 Ollama API**: http://localhost:11434
-- **💻 Terminal AI**: Run `crush` in any directory
+- **💻 Terminal AI**: Run `opencode` in any directory
 
 ## Quick Health Check
 
@@ -54,16 +54,16 @@ This will:
 3. Upload documents for analysis
 4. Use web search integration
 
-### Terminal AI (Crush)
+### Terminal AI (OpenCode)
 ```bash
 # Code assistance
-crush "Optimize this Python function" --file main.py
+opencode "Optimize this Python function" --file main.py
 
 # Code generation  
-crush "Create a REST API in Go for user management"
+opencode "Create a REST API in Go for user management"
 
 # Code review
-crush "Review this code for security issues" --file auth.py
+opencode "Review this code for security issues" --file auth.py
 ```
 
 ### Direct API Access
