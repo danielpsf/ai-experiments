@@ -22,11 +22,9 @@ StandardOutput=journal
 StandardError=journal
 SyslogIdentifier=ollama
 
-# Security settings
+# Security settings (relaxed for compatibility)
 NoNewPrivileges=yes
 PrivateTmp=yes
-ProtectSystem=strict
-ProtectHome=read-only
 ReadWritePaths=/home/daniel/.ollama
 
 [Install]

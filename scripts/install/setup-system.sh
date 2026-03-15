@@ -56,11 +56,14 @@ fi
 
 print_status "Docker and Docker Compose found"
 
+# Detect the real user (not root when using sudo)
+REAL_USER="${SUDO_USER:-$USER}"
+
 # Check if user is in docker group
-if ! groups $USER | grep -q docker; then
-    print_warning "User $USER is not in docker group"
+if ! groups "$REAL_USER" | grep -q docker; then
+    print_warning "User $REAL_USER is not in docker group"
     echo "Adding user to docker group..."
-    sudo usermod -aG docker $USER
+    sudo usermod -aG docker "$REAL_USER"
     print_warning "Please log out and log back in, then run this script again"
     exit 1
 fi
@@ -95,7 +98,7 @@ fi
 
 # Install OpenCode (MIT Licensed AI Assistant)
 echo -e "${BLUE}🤖 Installing OpenCode...${NC}"
-"$SCRIPT_DIR/install-opencode.sh"
+OPENCODE_AUTO_UPDATE=true "$SCRIPT_DIR/install-opencode.sh"
 
 # Setup environment
 echo -e "${BLUE}🔧 Setting up environment...${NC}"
@@ -130,7 +133,7 @@ mkdir -p "$PROJECT_ROOT/data/openwork/workspace"
 mkdir -p "$PROJECT_ROOT/data/openwork/logs"
 
 # Set proper permissions
-chown -R $USER:$USER "$PROJECT_ROOT/data"
+chown -R "$REAL_USER:$REAL_USER" "$PROJECT_ROOT/data"
 
 # Install systemd services
 echo -e "${BLUE}⚙️ Installing systemd services...${NC}"

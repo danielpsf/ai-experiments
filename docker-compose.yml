@@ -26,7 +26,7 @@ services:
       - ENABLE_RAG_HYBRID_SEARCH=true
       - CHUNK_SIZE=1000
       - CHUNK_OVERLAP=200
-      - RAG_TEMPLATE=Use the following context to answer the question:\n\n{context}\n\nQuestion: {query}
+      - RAG_TEMPLATE=Use the following context to answer the question context query
       
       # SearXNG Integration
       - ENABLE_RAG_WEB_SEARCH=true

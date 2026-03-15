@@ -13,6 +13,14 @@ NC='\033[0m'
 
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 
+# Detect the real user (not root when using sudo)
+REAL_USER="${SUDO_USER:-$USER}"
+if [ "$REAL_USER" = "root" ]; then
+    REAL_HOME="/root"
+else
+    REAL_HOME="/home/$REAL_USER"
+fi
+
 echo -e "${BLUE}🤖 OpenCode.ai Smart Setup (MIT Licensed)...${NC}"
 echo ""
 
@@ -58,7 +66,8 @@ if [ "$SKIP_INSTALL" = false ]; then
         exit 1
     fi
     
-    # Verify installation
+    # Verify installation (try multiple paths)
+    export PATH="$HOME/.opencode/bin:$PATH"  # Add to PATH for current session
     if command -v opencode &> /dev/null; then
         echo -e "${GREEN}✅ OpenCode installed successfully!${NC}"
         echo -e "${CYAN}   Version: $(opencode --version)${NC}"
@@ -74,53 +83,57 @@ fi
 
 # Setup configuration directory
 echo -e "${BLUE}📁 Setting up configuration...${NC}"
-mkdir -p ~/.config/opencode
+mkdir -p "$REAL_HOME/.config/opencode"
 
 # Check and setup main configuration
-if [ -f ~/.config/opencode/opencode.json ]; then
+if [ -f "$REAL_HOME/.config/opencode/opencode.json" ]; then
     echo -e "${GREEN}✅ OpenCode configuration already exists${NC}"
-    echo -e "${CYAN}   Location: ~/.config/opencode/opencode.json${NC}"
+    echo -e "${CYAN}   Location: $REAL_HOME/.config/opencode/opencode.json${NC}"
     
-    # Ask if user wants to update with project settings
-    echo ""
-    echo -e "${YELLOW}🔄 Would you like to update your configuration with this project's optimized settings?${NC}"
-    echo -e "${CYAN}   This will backup your current config and apply our Ollama + local model setup${NC}"
-    read -p "Update configuration? (y/N): " -r response
+    # Ask if user wants to update with project settings (unless in non-interactive mode)
+    if [ "${OPENCODE_AUTO_UPDATE:-false}" = "true" ]; then
+        response="y"
+        echo -e "${CYAN}🔄 Auto-updating configuration with project settings (OPENCODE_AUTO_UPDATE=true)${NC}"
+    else
+        echo -e "${YELLOW}🔄 Would you like to update your configuration with this project's optimized settings?${NC}"
+        echo -e "${CYAN}   This will backup your current config and apply our Ollama + local model setup${NC}"
+        read -p "Update configuration? (y/N): " -r response
+    fi
     
     if [[ "$response" =~ ^[Yy]$ ]]; then
         # Backup existing config
-        BACKUP_FILE=~/.config/opencode/opencode.json.backup.$(date +%Y%m%d_%H%M%S)
-        cp ~/.config/opencode/opencode.json "$BACKUP_FILE"
+        BACKUP_FILE="$REAL_HOME/.config/opencode/opencode.json.backup.$(date +%Y%m%d_%H%M%S)"
+        cp "$REAL_HOME/.config/opencode/opencode.json" "$BACKUP_FILE"
         echo -e "${GREEN}📋 Current config backed up to: ${BACKUP_FILE}${NC}"
         
         # Apply new configuration
-        cp "$PROJECT_ROOT/config/opencode/opencode.json" ~/.config/opencode/
+        cp "$PROJECT_ROOT/config/opencode/opencode.json" "$REAL_HOME/.config/opencode/"
         echo -e "${GREEN}📋 Configuration updated with project settings${NC}"
     else
         echo -e "${YELLOW}⏭️  Keeping existing configuration${NC}"
     fi
 else
     # No existing config, copy project config
-    cp "$PROJECT_ROOT/config/opencode/opencode.json" ~/.config/opencode/
+    cp "$PROJECT_ROOT/config/opencode/opencode.json" "$REAL_HOME/.config/opencode/"
     echo -e "${GREEN}📋 OpenCode configuration installed${NC}"
-    echo -e "${CYAN}   Location: ~/.config/opencode/opencode.json${NC}"
+    echo -e "${CYAN}   Location: $REAL_HOME/.config/opencode/opencode.json${NC}"
 fi
 
 # Check and setup TUI configuration
-if [ -f ~/.config/opencode/tui.json ]; then
+if [ -f "$REAL_HOME/.config/opencode/tui.json" ]; then
     echo -e "${GREEN}✅ TUI configuration already exists${NC}"
-    echo -e "${CYAN}   Location: ~/.config/opencode/tui.json${NC}"
+    echo -e "${CYAN}   Location: $REAL_HOME/.config/opencode/tui.json${NC}"
 else
-    cp "$PROJECT_ROOT/config/opencode/tui.json" ~/.config/opencode/
+    cp "$PROJECT_ROOT/config/opencode/tui.json" "$REAL_HOME/.config/opencode/"
     echo -e "${GREEN}🎨 TUI configuration installed${NC}"
-    echo -e "${CYAN}   Location: ~/.config/opencode/tui.json${NC}"
+    echo -e "${CYAN}   Location: $REAL_HOME/.config/opencode/tui.json${NC}"
 fi
 
 # Create/update development configuration
 echo ""
 echo -e "${BLUE}⚙️  Setting up development configuration...${NC}"
 
-DEV_CONFIG=~/.config/opencode/opencode-dev.json
+DEV_CONFIG="$REAL_HOME/.config/opencode/opencode-dev.json"
 cat > "$DEV_CONFIG" << 'EOF'
 {
   "$schema": "https://opencode.ai/config.json",
@@ -158,6 +171,11 @@ EOF
 
 echo -e "${GREEN}📋 Development configuration created${NC}"
 echo -e "${CYAN}   Location: ${DEV_CONFIG}${NC}"
+
+# Set proper ownership for config files
+if [ "$REAL_USER" != "root" ]; then
+    chown -R "$REAL_USER:$REAL_USER" "$REAL_HOME/.config/opencode"
+fi
 
 # Test OpenCode functionality
 echo ""
@@ -202,9 +220,9 @@ echo -e "${CYAN}   • Start interactive: ${NC}opencode"
 echo -e "${CYAN}   • Get help: ${NC}opencode --help"
 echo ""
 echo -e "${BLUE}💡 Configuration files:${NC}"
-echo -e "${CYAN}   • Main config: ~/.config/opencode/opencode.json${NC}"
-echo -e "${CYAN}   • TUI config: ~/.config/opencode/tui.json${NC}"
-echo -e "${CYAN}   • Dev config: ~/.config/opencode/opencode-dev.json${NC}"
+echo -e "${CYAN}   • Main config: $REAL_HOME/.config/opencode/opencode.json${NC}"
+echo -e "${CYAN}   • TUI config: $REAL_HOME/.config/opencode/tui.json${NC}"
+echo -e "${CYAN}   • Dev config: $REAL_HOME/.config/opencode/opencode-dev.json${NC}"
 echo ""
 echo -e "${BLUE}🚀 Usage examples:${NC}"
 echo -e "${CYAN}   • Code help: ${NC}opencode \"Explain this code\" --file main.py"
