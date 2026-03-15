@@ -20,10 +20,12 @@ graph TB
         subgraph "Docker Network: ai-stack"
             OW[OpenWebUI<br/>:3001]
             SX[SearXNG<br/>:8081]
+            OWK[OpenWork<br/>:8787]
             RD[Redis Cache<br/>:6380]
             
             OW --> SX
             SX --> RD
+            OWK --> RD
         end
     end
     
@@ -36,6 +38,7 @@ graph TB
     OL -.->|OpenAI API| OW
     OL -.->|Direct API| CR
     OL -.->|HTTP API| API
+    OL -.->|Worker API| OWK
     OW --> BR
     
     subgraph "External Services"
@@ -52,7 +55,7 @@ graph TB
     classDef external fill:#fff3e0
     
     class OL,M1,M2 native
-    class OW,SX,RD docker
+    class OW,SX,RD,OWK docker
     class CR,BR,API client
     class SE,GH external
 ```
@@ -142,7 +145,22 @@ engines:
 - **Purpose**: High-performance caching layer
 - **Technology**: Redis 7 Alpine
 - **Configuration**: Optimized for memory efficiency with LRU eviction
-- **Usage**: SearXNG result caching, session storage
+- **Usage**: SearXNG result caching, session storage, OpenWork task queue
+
+#### OpenWork Platform
+- **Purpose**: Enterprise-grade AI automation and workflow management
+- **Technology**: Node.js with Express backend, React frontend
+- **Features**: Worker management, task scheduling, approval workflows, browser automation
+- **Integration**: Connects to Ollama models via API, uses Redis for task queuing
+
+```yaml
+# OpenWork Configuration
+environment:
+  - OPENWORK_OLLAMA_URL=http://host.docker.internal:11434
+  - OPENWORK_REDIS_URL=redis://redis:6379
+  - OPENWORK_LOG_LEVEL=info
+  - OPENWORK_MAX_WORKERS=5
+```
 
 ### Client Layer: Access Points
 
@@ -164,6 +182,12 @@ engines:
 - **Compatibility**: OpenAI API format
 - **Usage**: Custom integrations, scripts, notebooks
 
+#### OpenWork Web Interface
+- **Purpose**: AI automation and workflow management
+- **Access**: http://localhost:8787
+- **Features**: Worker dashboard, task management, approval workflows
+- **Integration**: Team collaboration and automated AI workflows
+
 ## 🔌 Network Architecture
 
 ### Port Allocation
@@ -174,6 +198,7 @@ engines:
 │ Ollama          │ 11434│ AI Model API           │
 │ OpenWebUI       │ 3001 │ Web Interface          │
 │ SearXNG         │ 8081 │ Search Interface       │
+│ OpenWork        │ 8787 │ AI Automation Platform │
 │ Redis           │ 6380 │ Cache (internal)       │
 │ Nginx (optional)│ 80   │ Reverse Proxy          │
 └─────────────────┴──────┴────────────────────────┘
@@ -183,12 +208,15 @@ engines:
 ```
 OpenWebUI ─────────┐
                    ├──► host.docker.internal:11434 ──► Ollama
-OpenCode ────┘
+OpenCode ──────────┘
+OpenWork ──────────┘
 
 SearXNG ──► Redis Cache
         ──► External Search Engines
 
 OpenWebUI ──► SearXNG (for web search)
+OpenWork  ──► SearXNG (for research tasks)
+          ──► Redis Cache (for task storage)
 ```
 
 ### Docker Networking
@@ -206,11 +234,12 @@ Total System: 30GB RAM
 │   ├── Qwen2.5-Coder 14B: ~9GB
 │   ├── Llama 3.1 8B: ~5GB
 │   └── Ollama Overhead: ~4GB
-├── Docker Services: ~4GB
+├── Docker Services: ~5GB
 │   ├── OpenWebUI: ~1-2GB
 │   ├── SearXNG: ~1GB
+│   ├── OpenWork: ~512MB-1GB
 │   └── Redis: ~512MB
-├── System + Other: ~6GB
+├── System + Other: ~5GB
 └── Available Buffer: ~2GB
 ```
 
@@ -285,6 +314,7 @@ sequenceDiagram
     participant C as OpenCode
     participant O as Ollama
     participant W as OpenWebUI
+    participant OWK as OpenWork
     participant S as SearXNG
     
     D->>C: Ask coding question
@@ -304,6 +334,11 @@ sequenceDiagram
     W->>O: Synthesize with context
     O->>W: Research summary
     W->>D: Final answer
+    
+    D->>OWK: Schedule automation task
+    OWK->>O: Execute AI worker
+    O->>OWK: Task result
+    OWK->>D: Workflow completion
 ```
 
 ### File Processing Pipeline
