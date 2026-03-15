@@ -80,9 +80,9 @@ else
     print_status "Ollama already installed"
 fi
 
-# Install Crush (OpenCode successor)
-echo -e "${BLUE}🔨 Installing Crush (OpenCode)...${NC}"
-"$SCRIPT_DIR/install-crush.sh"
+# Install OpenCode (MIT Licensed AI Assistant)
+echo -e "${BLUE}🤖 Installing OpenCode...${NC}"
+"$SCRIPT_DIR/install-opencode.sh"
 
 # Setup environment
 echo -e "${BLUE}🔧 Setting up environment...${NC}"
@@ -137,7 +137,7 @@ echo -e "${BLUE}📍 Next steps:${NC}"
 echo "   1. Start the stack: ./scripts/management/start-stack.sh"
 echo "   2. Access OpenWebUI: http://localhost:3001"
 echo "   3. Access SearXNG: http://localhost:8081"
-echo "   4. Configure Crush: crush --config"
+echo "   4. Use terminal AI: opencode"
 echo ""
 echo -e "${BLUE}📚 Documentation: docs/QUICK_START.md${NC}"
 echo ""

@@ -198,16 +198,16 @@ else
     echo -e "${RED}❌ MISSING${NC}"
 fi
 
-# Crush/OpenCode
+# OpenCode
 echo ""
-echo -e "${BLUE}🔨 Terminal AI:${NC}"
+echo -e "${BLUE}🤖 Terminal AI:${NC}"
 
-printf "%-20s " "Crush Install:"
-if command -v crush &> /dev/null; then
+printf "%-20s " "OpenCode Install:"
+if command -v opencode &> /dev/null; then
     echo -e "${GREEN}✅ INSTALLED${NC}"
     
-    printf "%-20s " "Crush Config:"
-    if [ -f ~/.config/crush/crush.json ]; then
+    printf "%-20s " "OpenCode Config:"
+    if [ -f ~/.config/opencode/opencode.json ]; then
         echo -e "${GREEN}✅ CONFIGURED${NC}"
     else
         echo -e "${YELLOW}⚠️  NOT CONFIGURED${NC}"
