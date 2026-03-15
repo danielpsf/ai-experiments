@@ -22,7 +22,7 @@ chmod +x scripts/install/setup-system.sh
 - 🌐 **OpenWebUI**: http://localhost:3001 (Main AI interface)
 - 🔍 **SearXNG**: http://localhost:8081 (Privacy-focused search)
 - 🦙 **Ollama API**: http://localhost:11434 (Direct model access)
-- 🔨 **Crush/OpenCode**: Terminal-based AI assistant
+- 🤖 **OpenCode**: Terminal-based AI assistant
 
 ## ✨ Features
 
@@ -42,7 +42,7 @@ chmod +x scripts/install/setup-system.sh
 - **Long Context**: Handle entire codebases and research papers
 
 ### 💻 Development Tools
-- **OpenCode/Crush**: Terminal AI assistant
+- **OpenCode**: Terminal AI assistant
 - **LSP Integration**: Language server support
 - **API Access**: Full REST API compatibility
 
@@ -101,7 +101,7 @@ chmod +x scripts/install/setup-system.sh
 ./scripts/monitoring/log-viewer.sh
 
 # Terminal AI assistant
-crush "Help me optimize this Python function" --file main.py
+opencode "Help me optimize this Python function" --file main.py
 ```
 
 ## 🤝 Contributing
@@ -117,7 +117,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [OpenWebUI](https://github.com/open-webui/open-webui) - Excellent AI interface
 - [Ollama](https://github.com/ollama/ollama) - Local LLM runner
 - [SearXNG](https://github.com/searxng/searxng) - Privacy-focused search
-- [Charm](https://charm.sh/) - Crush/OpenCode terminal tools
+- [OpenCode.ai](https://opencode.ai/) - MIT-licensed terminal AI tools
 
 ---
 
