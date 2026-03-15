@@ -72,12 +72,16 @@ fi
 print_status "System optimization applied"
 
 # Install Ollama natively
-echo -e "${BLUE}🦙 Installing Ollama...${NC}"
+echo -e "${BLUE}🦙 Checking Ollama installation...${NC}"
 if ! command -v ollama &> /dev/null; then
+    echo -e "${BLUE}📥 Installing Ollama...${NC}"
     curl -fsSL https://ollama.com/install.sh | sh
     print_status "Ollama installed"
 else
-    print_status "Ollama already installed"
+    OLLAMA_VERSION=$(ollama --version 2>/dev/null | head -n1 || echo "unknown")
+    echo -e "${GREEN}✅ Ollama already installed${NC}"
+    echo -e "${GREEN}   Version: ${OLLAMA_VERSION}${NC}"
+    print_status "Ollama found, proceeding to configuration"
 fi
 
 # Install OpenCode (MIT Licensed AI Assistant)
