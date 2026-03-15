@@ -106,6 +106,51 @@ services:
           memory: 512M
           cpus: '0.5'
 
+  # OpenWork - AI Automation & Workflow Management
+  openwork:
+    image: node:18-alpine
+    container_name: openwork-server
+    restart: unless-stopped
+    working_dir: /app
+    command: >
+      sh -c "
+        npm install -g openwork-server@latest &&
+        openwork-server --workspace /workspace --approval auto
+      "
+    ports:
+      - "8787:8787"
+    volumes:
+      - ./config/openwork:/app/config:ro
+      - ./config/openwork/workers:/workspace/workers
+      - ./data/openwork:/workspace/data
+      - openwork-logs:/logs
+    environment:
+      - NODE_ENV=development
+      - OPENWORK_PORT=8787
+      - OPENWORK_HOST=0.0.0.0
+      - OPENWORK_WORKSPACE=/workspace
+      - OPENWORK_APPROVAL_MODE=auto
+      - OPENWORK_TOKEN=${OPENWORK_TOKEN:-openwork-access-token}
+      - OPENWORK_HOST_TOKEN=${OPENWORK_HOST_TOKEN:-openwork-host-token}
+      - OPENCODE_URL=http://host.docker.internal:11434
+      - LOG_LEVEL=info
+      - ENABLE_WEB_UI=true
+      - ENABLE_TEAM_SHARING=true
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - redis
+    networks:
+      - ai-stack
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '1.0'
+        reservations:
+          memory: 512M
+          cpus: '0.5'
+
   # Nginx Reverse Proxy (Optional - Production Mode)
   nginx:
     image: nginx:alpine
@@ -120,6 +165,7 @@ services:
     depends_on:
       - open-webui
       - searxng
+      - openwork
     networks:
       - ai-stack
     profiles:
@@ -134,4 +180,6 @@ networks:
 
 volumes:
   redis-data:
+    driver: local
+  openwork-logs:
     driver: local

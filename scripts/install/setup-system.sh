@@ -39,7 +39,16 @@ if ! command -v docker &> /dev/null; then
     exit 1
 fi
 
-if ! command -v docker-compose &> /dev/null; then
+# Check for Docker Compose (both V1 and V2)
+if command -v docker-compose &> /dev/null; then
+    COMPOSE_CMD="docker-compose"
+    COMPOSE_VERSION=$(docker-compose version --short 2>/dev/null || echo "unknown")
+    print_status "Docker Compose V1 found (${COMPOSE_VERSION})"
+elif docker compose version &> /dev/null; then
+    COMPOSE_CMD="docker compose"
+    COMPOSE_VERSION=$(docker compose version --short 2>/dev/null || echo "unknown")
+    print_status "Docker Compose V2 found (${COMPOSE_VERSION})"
+else
     print_error "Docker Compose is required but not installed" 
     echo "Please install Docker Compose: https://docs.docker.com/compose/install/"
     exit 1

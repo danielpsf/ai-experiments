@@ -1,0 +1,79 @@
+{
+  "version": "0.11.x",
+  "workspace": {
+    "path": "/workspace",
+    "approval_mode": "auto",
+    "isolation_level": "worker"
+  },
+  "server": {
+    "host": "0.0.0.0",
+    "port": 8787,
+    "cors": {
+      "enabled": true,
+      "origins": ["http://localhost:3001", "http://localhost:8081", "http://localhost:8787"]
+    }
+  },
+  "opencode_integration": {
+    "enabled": true,
+    "opencode_url": "http://opencode:4096",
+    "fallback_url": "http://localhost:11434"
+  },
+  "workers": [
+    {
+      "name": "ai-development",
+      "description": "AI development and experimentation worker",
+      "directory": "/workspace/workers/ai-development",
+      "auto_approve": true,
+      "skills": [
+        "code-generation",
+        "debugging",
+        "documentation",
+        "testing",
+        "optimization"
+      ]
+    },
+    {
+      "name": "data-analysis",
+      "description": "Data analysis and research worker",
+      "directory": "/workspace/workers/data-analysis", 
+      "auto_approve": true,
+      "skills": [
+        "data-processing",
+        "visualization",
+        "statistical-analysis",
+        "reporting"
+      ]
+    },
+    {
+      "name": "automation",
+      "description": "General automation and workflow worker",
+      "directory": "/workspace/workers/automation",
+      "auto_approve": false,
+      "skills": [
+        "web-scraping",
+        "api-integration",
+        "file-processing",
+        "scheduling"
+      ]
+    }
+  ],
+  "features": {
+    "web_ui": true,
+    "api_access": true,
+    "team_sharing": true,
+    "audit_logging": true,
+    "scheduled_tasks": true
+  },
+  "security": {
+    "require_authentication": false,
+    "rate_limiting": {
+      "enabled": true,
+      "requests_per_minute": 100
+    }
+  },
+  "logging": {
+    "level": "info",
+    "format": "json",
+    "output": "/logs/openwork.log"
+  }
+}

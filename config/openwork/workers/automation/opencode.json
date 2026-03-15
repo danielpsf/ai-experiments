@@ -1,0 +1,67 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "type": "ollama",
+    "url": "http://ollama:11434",
+    "model": "llama3.1:8b"
+  },
+  "fallback_providers": [
+    {
+      "type": "ollama",
+      "url": "http://ollama:11434",
+      "model": "qwen2.5-coder:14b"
+    }
+  ],
+  "features": {
+    "web_automation": true,
+    "file_operations": true,
+    "api_integration": true,
+    "scheduling": true,
+    "email_automation": false,
+    "approval_required": true
+  },
+  "workspace": {
+    "root": "/workspace/workers/automation",
+    "auto_save": true,
+    "backup_enabled": true
+  },
+  "skills": [
+    "web-scraping",
+    "api-integration", 
+    "file-processing",
+    "data-extraction",
+    "workflow-automation",
+    "task-scheduling",
+    "browser-automation",
+    "system-integration",
+    "notification-handling",
+    "report-automation"
+  ],
+  "automations": {
+    "web_scraping": {
+      "enabled": true,
+      "auto_run": false,
+      "rate_limit": "1req/sec",
+      "respect_robots": true
+    },
+    "file_processing": {
+      "enabled": true,
+      "auto_run": false,
+      "supported_formats": ["csv", "json", "xml", "pdf", "docx"]
+    },
+    "notifications": {
+      "enabled": true,
+      "auto_run": true,
+      "channels": ["log", "webhook"]
+    }
+  },
+  "security": {
+    "approval_required": true,
+    "dangerous_operations": [
+      "system_commands",
+      "network_requests",
+      "file_deletion",
+      "external_api_calls"
+    ]
+  }
+}

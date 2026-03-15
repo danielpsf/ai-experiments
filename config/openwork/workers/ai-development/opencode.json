@@ -1,0 +1,56 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "type": "ollama",
+    "url": "http://ollama:11434",
+    "model": "qwen2.5-coder:14b"
+  },
+  "fallback_providers": [
+    {
+      "type": "ollama", 
+      "url": "http://ollama:11434",
+      "model": "llama3.1:8b"
+    }
+  ],
+  "features": {
+    "code_execution": true,
+    "file_operations": true,
+    "web_search": true,
+    "git_operations": true,
+    "docker_operations": true
+  },
+  "workspace": {
+    "root": "/workspace/workers/ai-development",
+    "auto_save": true,
+    "backup_enabled": true
+  },
+  "skills": [
+    "python-development",
+    "javascript-development", 
+    "go-development",
+    "rust-development",
+    "api-development",
+    "testing-automation",
+    "code-review",
+    "documentation-generation",
+    "debugging-assistance",
+    "performance-optimization"
+  ],
+  "automations": {
+    "code_formatting": {
+      "enabled": true,
+      "auto_run": true,
+      "tools": ["black", "prettier", "gofmt", "rustfmt"]
+    },
+    "testing": {
+      "enabled": true,
+      "auto_run": false,
+      "frameworks": ["pytest", "jest", "go test", "cargo test"]
+    },
+    "linting": {
+      "enabled": true,
+      "auto_run": true,
+      "tools": ["pylint", "eslint", "golint", "clippy"]
+    }
+  }
+}

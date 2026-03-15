@@ -16,13 +16,29 @@ echo -e "${BLUE}🛑 Stopping AI Development Stack...${NC}"
 
 cd "$PROJECT_ROOT"
 
+# Detect Docker Compose version
+detect_docker_compose() {
+    if command -v docker-compose &> /dev/null; then
+        echo "docker-compose"
+    elif docker compose version &> /dev/null; then
+        echo "docker compose"
+    else
+        echo -e "${YELLOW}⚠️  Docker Compose not found, skipping Docker services${NC}"
+        return 1
+    fi
+}
+
 # Stop Docker services
 echo -e "${BLUE}🐳 Stopping Docker services...${NC}"
-if docker-compose ps -q | grep -q .; then
-    docker-compose down
-    echo -e "${GREEN}✅ Docker services stopped${NC}"
+if COMPOSE_CMD=$(detect_docker_compose); then
+    if $COMPOSE_CMD ps -q | grep -q .; then
+        $COMPOSE_CMD down
+        echo -e "${GREEN}✅ Docker services stopped${NC}"
+    else
+        echo -e "${YELLOW}⚠️  No Docker services running${NC}"
+    fi
 else
-    echo -e "${YELLOW}⚠️  No Docker services running${NC}"
+    echo -e "${YELLOW}⚠️  Skipping Docker services stop${NC}"
 fi
 
 # Stop Ollama service (optional - you might want to keep it running)

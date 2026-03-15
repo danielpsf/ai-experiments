@@ -23,6 +23,20 @@ if [ -f "$PROJECT_ROOT/.env" ]; then
     set +a
 fi
 
+# Detect Docker Compose version
+detect_docker_compose() {
+    if command -v docker-compose &> /dev/null; then
+        echo "docker-compose"
+    elif docker compose version &> /dev/null; then
+        echo "docker compose"
+    else
+        echo -e "${RED}❌ Docker Compose not found${NC}"
+        exit 1
+    fi
+}
+
+COMPOSE_CMD=$(detect_docker_compose)
+
 cd "$PROJECT_ROOT"
 
 # Function to check service health
@@ -90,11 +104,11 @@ wait
 
 # Start Docker services
 echo -e "${BLUE}🐳 Starting Docker services...${NC}"
-if docker-compose ps | grep -q "Up"; then
+if $COMPOSE_CMD ps | grep -q "Up"; then
     echo -e "${YELLOW}⚠️  Some Docker services already running${NC}"
-    docker-compose restart
+    $COMPOSE_CMD restart
 else
-    docker-compose up -d
+    $COMPOSE_CMD up -d
 fi
 
 # Health checks for Docker services
@@ -123,7 +137,7 @@ fi
 
 # Final status check
 echo -e "${BLUE}📊 Service Status:${NC}"
-docker-compose ps
+$COMPOSE_CMD ps
 
 echo ""
 echo -e "${GREEN}🎉 AI Development Stack is ready!${NC}"
