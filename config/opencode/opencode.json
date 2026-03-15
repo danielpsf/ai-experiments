@@ -1,0 +1,96 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "ollama-local": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Local Ollama",
+      "options": {
+        "baseURL": "http://localhost:11434/v1"
+      },
+      "models": {
+        "qwen2.5-coder:14b": {
+          "name": "Qwen 2.5 Coder 14B",
+          "limit": {
+            "context": 32768,
+            "output": 8192
+          }
+        },
+        "qwen2.5-coder:7b": {
+          "name": "Qwen 2.5 Coder 7B",
+          "limit": {
+            "context": 32768,
+            "output": 8192
+          }
+        },
+        "llama3.1:8b": {
+          "name": "Llama 3.1 8B",
+          "limit": {
+            "context": 131072,
+            "output": 8192
+          }
+        }
+      }
+    }
+  },
+  "model": "qwen2.5-coder:14b",
+  "small_model": "qwen2.5-coder:7b",
+  "agent": {
+    "coder": {
+      "model": "qwen2.5-coder:14b",
+      "description": "Specialized coding agent for development tasks",
+      "prompt": "You are an expert software developer. Focus on writing clean, efficient, and well-documented code. Follow best practices and provide detailed explanations for complex solutions."
+    },
+    "research": {
+      "model": "llama3.1:8b",
+      "description": "Research and analysis agent for documentation and investigation",
+      "prompt": "You are a research assistant specializing in technical analysis and documentation. Provide thorough, well-structured responses with proper citations and examples."
+    },
+    "task": {
+      "model": "qwen2.5-coder:7b",
+      "description": "Quick task completion agent for simple operations",
+      "prompt": "You are a helpful assistant for quick development tasks. Provide concise, accurate solutions with minimal overhead."
+    },
+    "title": {
+      "model": "llama3.1:8b",
+      "description": "Session title generation agent",
+      "prompt": "Generate concise, descriptive titles for development sessions. Keep titles under 10 words and focus on the main task or topic."
+    }
+  },
+  "lsp": {
+    "go": {
+      "command": "gopls"
+    },
+    "typescript": {
+      "command": "typescript-language-server",
+      "args": ["--stdio"]
+    },
+    "python": {
+      "command": "pylsp"
+    },
+    "rust": {
+      "command": "rust-analyzer"
+    },
+    "java": {
+      "command": "jdtls"
+    }
+  },
+  "tools": {
+    "write": true,
+    "edit": true,
+    "bash": true,
+    "view": true,
+    "grep": true,
+    "find": true
+  },
+  "permission": {
+    "bash": "allow",
+    "edit": "allow",
+    "write": "allow"
+  },
+  "options": {
+    "debug": false,
+    "auto_save": true
+  },
+  "autoupdate": true,
+  "share": "manual"
+}
