@@ -37,6 +37,7 @@ This will:
 
 - **🌐 OpenWebUI**: http://localhost:3001
 - **🔍 SearXNG**: http://localhost:8081  
+- **🤖 OpenWork**: http://localhost:8787
 - **🦙 Ollama API**: http://localhost:11434
 - **💻 Terminal AI**: Run `opencode` in any directory
 
@@ -66,6 +67,18 @@ opencode "Create a REST API in Go for user management"
 opencode "Review this code for security issues" --file auth.py
 ```
 
+### AI Automation (OpenWork)
+1. Open http://localhost:8787
+2. Explore pre-configured workers:
+   - **AI Development**: Code generation, testing, review
+   - **Data Analysis**: Data processing, visualization, insights  
+   - **Automation**: Web scraping, API integration, workflows
+3. Create your first automation:
+   ```javascript
+   "Analyze all Python files in this project and create a quality report"
+   ```
+4. Schedule recurring tasks and share workflows with your team
+
 ### Direct API Access
 ```bash
 # List available models
@@ -81,7 +94,8 @@ curl -X POST http://localhost:11434/api/chat -d '{
 ## Next Steps
 
 - 📖 [Architecture Overview](ARCHITECTURE.md) - Understanding the system
-- ⚙️ [OpenCode Integration](opencode-integration/SETUP.md) - Terminal AI setup
+- ⚙️ [OpenCode Integration](opencode-integration/README.md) - Terminal AI setup
+- 🤖 [OpenWork Automation](openwork-integration/README.md) - AI workflows & team collaboration
 - 🔧 [Performance Tuning](../PERFORMANCE_TUNING.md) - Optimization guide
 - 🩺 [Troubleshooting](../TROUBLESHOOTING.md) - Common issues and solutions
 

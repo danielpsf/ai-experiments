@@ -1,6 +1,6 @@
 # AI Development Stack Experiments
 
-> **A comprehensive local AI development environment with OpenWebUI, Ollama, SearXNG, and OpenCode integration**
+> **A comprehensive local AI development environment with OpenWebUI, Ollama, SearXNG, OpenCode, and OpenWork automation platform**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Docker](https://img.shields.io/badge/Docker-ready-blue.svg)](https://www.docker.com/)
@@ -21,6 +21,7 @@ chmod +x scripts/install/setup-system.sh
 **Access Points:**
 - 🌐 **OpenWebUI**: http://localhost:3001 (Main AI interface)
 - 🔍 **SearXNG**: http://localhost:8081 (Privacy-focused search)
+- 🤖 **OpenWork**: http://localhost:8787 (AI automation & workflows)
 - 🦙 **Ollama API**: http://localhost:11434 (Direct model access)
 - 🤖 **OpenCode**: Terminal-based AI assistant
 
@@ -46,11 +47,20 @@ chmod +x scripts/install/setup-system.sh
 - **LSP Integration**: Language server support
 - **API Access**: Full REST API compatibility
 
+### 🔄 Automation & Workflows (NEW!)
+- **OpenWork Platform**: Enterprise-grade AI automation
+- **Pre-configured Workers**: AI development, data analysis, automation
+- **Team Collaboration**: Share workflows across team members
+- **Approval Workflows**: Control dangerous operations
+- **Browser Automation**: Automated web scraping and data extraction
+- **Scheduled Tasks**: Recurring workflows and reports
+
 ## 📚 Documentation
 
 - 📖 [Quick Start Guide](docs/QUICK_START.md) - Get running in 5 minutes
 - 🏗️ [Architecture Overview](docs/ARCHITECTURE.md) - System design and components
 - ⚙️ [OpenCode Integration](docs/opencode-integration/README.md) - Terminal AI setup
+- 🤖 [OpenWork Automation](docs/openwork-integration/README.md) - AI workflows & team collaboration
 - 🔧 [Performance Tuning](docs/PERFORMANCE_TUNING.md) - Optimization guide
 - 🩺 [Troubleshooting](docs/TROUBLESHOOTING.md) - Common issues and solutions
 
@@ -68,6 +78,13 @@ chmod +x scripts/install/setup-system.sh
 - **Data Processing**: AI-powered data analysis workflows
 - **Writing Assistance**: Academic and technical writing support
 
+### For Teams & Automation
+- **Workflow Automation**: Automate repetitive business processes
+- **Data Collection**: Automated web scraping and data gathering
+- **Report Generation**: Scheduled analytics and insights reports
+- **Code Automation**: Automated testing, deployment, and monitoring
+- **Team Collaboration**: Share AI workers and workflows across teams
+
 ## 📊 System Requirements
 
 - **OS**: Linux (Ubuntu 20.04+ recommended)
@@ -82,6 +99,7 @@ chmod +x scripts/install/setup-system.sh
 |---------|------|---------|----------------|
 | OpenWebUI | 3001 | Main AI interface | ~1-2GB RAM |
 | SearXNG | 8081 | Privacy search | ~512MB RAM |
+| OpenWork | 8787 | AI automation & workflows | ~512MB-1GB RAM |
 | Ollama | 11434 | AI model server | ~15-20GB RAM |
 | Redis | 6380 | Caching layer | ~512MB RAM |
 

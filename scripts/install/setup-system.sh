@@ -105,9 +105,13 @@ if [ ! -f "$PROJECT_ROOT/.env" ]; then
     # Generate secrets
     WEBUI_SECRET=$(openssl rand -hex 32)
     SEARXNG_SECRET=$(openssl rand -hex 32)
+    OPENWORK_TOKEN=$(openssl rand -hex 32)
+    OPENWORK_HOST_TOKEN=$(openssl rand -hex 32)
     
     sed -i "s/your-secret-key-here/$WEBUI_SECRET/" "$PROJECT_ROOT/.env"
     sed -i "s/your-searxng-secret-here/$SEARXNG_SECRET/" "$PROJECT_ROOT/.env"
+    sed -i "s/your-openwork-access-token-here/$OPENWORK_TOKEN/" "$PROJECT_ROOT/.env"
+    sed -i "s/your-openwork-host-token-here/$OPENWORK_HOST_TOKEN/" "$PROJECT_ROOT/.env"
     
     print_status "Environment file created with generated secrets"
 else
@@ -122,6 +126,8 @@ sed -i "s/your-searxng-secret-here/$SEARXNG_SECRET/" "$PROJECT_ROOT/config/searx
 echo -e "${BLUE}📁 Creating data directories...${NC}"
 mkdir -p "$PROJECT_ROOT/data/open-webui"
 mkdir -p "$PROJECT_ROOT/data/searxng"
+mkdir -p "$PROJECT_ROOT/data/openwork/workspace"
+mkdir -p "$PROJECT_ROOT/data/openwork/logs"
 
 # Set proper permissions
 chown -R $USER:$USER "$PROJECT_ROOT/data"
@@ -149,7 +155,8 @@ echo -e "${BLUE}📍 Next steps:${NC}"
 echo "   1. Start the stack: ./scripts/management/start-stack.sh"
 echo "   2. Access OpenWebUI: http://localhost:3001"
 echo "   3. Access SearXNG: http://localhost:8081"
-echo "   4. Use terminal AI: opencode"
+echo "   4. Access OpenWork: http://localhost:8787"
+echo "   5. Use terminal AI: opencode"
 echo ""
 echo -e "${BLUE}📚 Documentation: docs/QUICK_START.md${NC}"
 echo ""
