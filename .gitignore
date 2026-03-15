@@ -64,6 +64,3 @@ yarn-error.log*
 # Backup files
 *.backup
 *.bak
-
-# Monitoring data
-monitoring/data/

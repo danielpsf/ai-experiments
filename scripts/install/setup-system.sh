@@ -112,8 +112,7 @@ sed -i "s/your-searxng-secret-here/$SEARXNG_SECRET/" "$PROJECT_ROOT/config/searx
 # Create data directories
 echo -e "${BLUE}📁 Creating data directories...${NC}"
 mkdir -p "$PROJECT_ROOT/data/open-webui"
-mkdir -p "$PROJECT_ROOT/data/searxng" 
-mkdir -p "$PROJECT_ROOT/data/monitoring"
+mkdir -p "$PROJECT_ROOT/data/searxng"
 
 # Set proper permissions
 chown -R $USER:$USER "$PROJECT_ROOT/data"
