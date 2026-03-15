@@ -6,14 +6,16 @@ services:
     image: ghcr.io/open-webui/open-webui:main
     container_name: open-webui
     restart: unless-stopped
-    ports:
-      - "3001:8080"
+    network_mode: host
     volumes:
       - ./data/open-webui:/app/backend/data
       - ./config/openwebui:/app/backend/config:ro
     environment:
       # Native Ollama Connection
-      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      - OLLAMA_BASE_URL=http://localhost:11434
+      
+      # Port Configuration
+      - PORT=3001
       
       # Single User Optimizations
       - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
@@ -31,7 +33,7 @@ services:
       # SearXNG Integration
       - ENABLE_RAG_WEB_SEARCH=true
       - RAG_WEB_SEARCH_ENGINE=searxng
-      - SEARXNG_QUERY_URL=http://searxng:8080/search?q=<query>&format=json
+      - SEARXNG_QUERY_URL=http://localhost:8081/search?q=<query>&format=json
       
       # Development Features
       - ENABLE_MODEL_FILTER=true
@@ -40,12 +42,8 @@ services:
       - WEBUI_AUTH=false
       - TASK_MODEL_EXTERNAL=false
       
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     depends_on:
       - searxng
-    networks:
-      - ai-stack
     deploy:
       resources:
         limits:

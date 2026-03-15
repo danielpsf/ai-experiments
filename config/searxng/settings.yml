@@ -7,11 +7,20 @@ server:
   port: 8080
   bind_address: "0.0.0.0"
   base_url: "http://localhost:8081"
+  image_proxy: true
+  method: "GET"
 
 search:
   safe_search: 0
   autocomplete: "google"
   default_lang: "en"
+  formats:
+    - html
+    - json
+
+ui:
+  query_in_title: false
+  infinite_scroll: false
 
 engines:
   - name: google
